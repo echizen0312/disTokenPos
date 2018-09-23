@@ -1,31 +1,38 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="app">
+        <el-container>
+            <el-header>
+                <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="1">扫码收款</el-menu-item>
+                    <el-menu-item index="2">本机钱包</el-menu-item>
+                </el-menu>
+            </el-header>
+            <el-main>
+                <router-view ref="child"/>
+            </el-main>
+        </el-container>
     </div>
-    <router-view/>
-  </div>
 </template>
 
+<script>
+    export default {
+        name: 'App',
+        data() {
+            return {
+                activeIndex: '1'
+            }
+        },
+        created: function () {
+
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        }
+    }
+</script>
+
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
