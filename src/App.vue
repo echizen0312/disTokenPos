@@ -7,7 +7,7 @@
                     <el-menu-item index="2">本机钱包</el-menu-item>
                 </el-menu>
             </el-header>
-            <el-main>
+            <el-main style="">
                 <router-view ref="child"/>
             </el-main>
         </el-container>
@@ -26,8 +26,13 @@
 
         },
         methods: {
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+            handleSelect(key) {
+                if (key == '1') {
+                    this.$router.replace('/Scan')
+                }
+                if (key == '2') {
+                    this.$router.replace('/Other')
+                }
             }
         }
     }
