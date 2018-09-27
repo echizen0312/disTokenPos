@@ -1,4 +1,5 @@
 module.exports = {
-  baseUrl: '/disTokenPos',
-  productionSourceMap: false
+    baseUrl: '/disTokenPos',
+    assetsDir: 'static',
+    productionSourceMap: false
 }
