@@ -6,16 +6,16 @@
                style="position: absolute; top: 0; left: 0; width: 0; height: 0; border: none;"/>
         <el-row :gutter="20" style="width: 100%;">
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" style="margin-bottom: 20px;">
-                <el-card class="box-card" style="width:100%; min-width: 320px;">
+                <el-card class="box-card" style="width:100%; min-width: 299px;">
                     <div slot="header">
-                        <span>发起收款</span>
+                        <span>收款面板</span>
                         <el-switch
                                 style="float: right;"
                                 v-model="autoRequest"
                                 active-color="#13ce66"
                                 inactive-color="#ff4949"
-                                active-text="自动"
-                                inactive-text="手动">
+                                active-text="自动确认"
+                                inactive-text="手动确认">
                         </el-switch>
                     </div>
                     <el-select v-model="form.token" placeholder="请选择收款币种" style="width: 100%; margin-bottom: 10px;">
@@ -27,85 +27,87 @@
                         </el-option>
                     </el-select>
                     <el-row :gutter="10" style="margin-bottom: 10px;">
-                        <el-col :span="18">
-                            <div style="text-align: left; font-size: 22px; font-weight: bold; padding: 10px; width: 100%; color: #F56C6C;">
+                        <el-col :span="18" style="padding: 10px 0 10px 12px;">
+                            <div style="text-align: left; font-size: 22px; font-weight: bold; width: 100%; color: #F56C6C;">
                                 {{ form.number }}
                             </div>
                         </el-col>
-                        <el-col :span="6">
-                            <div style="text-align: left; font-size: 22px; font-weight: bold; padding: 10px; width: 100%; color: #F56C6C;">
+                        <el-col :span="6" style="padding: 10px 12px 10px 0;">
+                            <div style="text-align: right; font-size: 22px; font-weight: bold; width: 100%; color: #F56C6C;">
                                 {{ form.token }}
                             </div>
                         </el-col>
                     </el-row>
                     <el-row :gutter="10" style="margin-bottom: 10px;">
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('1')">1
+                            <el-button type="info" class="sakButton" @click="NumClick('1')">1
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('2')">2
+                            <el-button type="info" class="sakButton" @click="NumClick('2')">2
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('3')">3
+                            <el-button type="info" class="sakButton" @click="NumClick('3')">3
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" icon="el-icon-back"
+                            <el-button type="warning" class="sakButton" icon="el-icon-back"
                                        @click="NumDelete"></el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="10" style="margin-bottom: 10px;">
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('4')">4
+                            <el-button type="info" class="sakButton" @click="NumClick('4')">4
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('5')">5
+                            <el-button type="info" class="sakButton" @click="NumClick('5')">5
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('6')">6
+                            <el-button type="info" class="sakButton" @click="NumClick('6')">6
                             </el-button>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="info" style="width: 100%; height: 60px;" @click="NumClear">清空</el-button>
+                            <el-button type="danger" class="sakButton" icon="el-icon-delete"
+                                       @click="NumClear"></el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="10" style="margin-bottom: 10px;">
                         <el-col :span="18">
                             <el-row :gutter="10" style="margin-bottom: 10px;">
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('7')">7
+                                    <el-button type="info" class="sakButton" @click="NumClick('7')">7
                                     </el-button>
                                 </el-col>
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('8')">8
+                                    <el-button type="info" class="sakButton" @click="NumClick('8')">8
                                     </el-button>
                                 </el-col>
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('9')">9
+                                    <el-button type="info" class="sakButton" @click="NumClick('9')">9
                                     </el-button>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="10" style="margin-bottom: 10px;">
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('0')">0
+                                    <el-button type="info" class="sakButton" @click="NumClick('0')">0
                                     </el-button>
                                 </el-col>
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('00')">00
+                                    <el-button type="info" class="sakButton" @click="NumClick('00')">00
                                     </el-button>
                                 </el-col>
                                 <el-col :span="8">
-                                    <el-button type="info" style="width: 100%; height: 60px;" @click="NumClick('.')">.
+                                    <el-button type="info" class="sakButton" @click="NumClick('.')">.
                                     </el-button>
                                 </el-col>
                             </el-row>
                         </el-col>
                         <el-col :span="6">
-                            <el-button type="success" style="width: 100%; height: 130px;" @click="NumSubmit">确定
+                            <el-button type="success" class="sakButton big" icon="el-icon-check"
+                                       @click="NumSubmit">
                             </el-button>
                         </el-col>
                     </el-row>
@@ -114,7 +116,7 @@
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" style="margin-bottom: 20px;">
                 <el-card class="box-card" style="width:100%;">
                     <div slot="header">
-                        <span>收款记录</span>
+                        <span>收款记录（最近10条）</span>
                         <el-button style="float: right; padding: 3px 0" type="text" icon="el-icon-refresh"
                                    @click="QueryTrxList">刷新
                         </el-button>
@@ -122,20 +124,23 @@
                     <el-table
                             :data="trxList"
                             stripe
-                            style="width: 100%">
+                            style="width: 100%"
+                            :row-class-name="tableRowClassName">
                         <el-table-column
                                 prop="date"
-                                label="日期"
+                                label="收款时间"
                                 width="180">
                         </el-table-column>
                         <el-table-column
                                 prop="name"
-                                label="账号"
-                                width="180">
+                                label="付款账户">
                         </el-table-column>
                         <el-table-column
+                                fixed="right"
+                                align="right"
                                 prop="quantity"
-                                label="金额">
+                                width="150"
+                                label="收款金额">
                         </el-table-column>
                     </el-table>
                 </el-card>
@@ -167,36 +172,23 @@
 
 <script>
     /* eslint-disable no-undef */
-    // let CryptoJS = require("crypto-js")
     import * as moment from 'moment'
 
     let Eos = require('eosjs')
+
     export default {
         name: 'Scan',
         data() {
             return {
-                host: host,
-                selfAccount: selfAccount,
-                options: [
-                    {
-                        value: 'TOK',
-                        label: 'TOK'
-                    },
-                    {
-                        value: 'SNC',
-                        label: 'SNC'
-                    },
-                    {
-                        value: 'LMT',
-                        label: 'LMT'
-                    }
-                ],
+                host: configObj.host,
+                selfAccount: configObj.account,
+                options: configObj.options,
                 form: {
                     to: '',
-                    // number: '收款金额',
-                    // token: ''
-                    number: '1.0000',
-                    token: 'TOK'
+                    number: '收款金额',
+                    token: ''
+                    // number: '1.0000',
+                    // token: 'TOK'
                 },
                 dialogFormVisible: false,
                 isScanning: false,
@@ -209,7 +201,9 @@
             }
         },
         created: function () {
-            // let self = this
+            let self = this
+            self.$emit('setTop', {activeIndex: '1'})
+            self.QueryTrxList()
         },
         beforeDestroy: function () {
             this.isRun = false
@@ -226,7 +220,7 @@
                 try {
                     let obj = JSON.parse(val)
                     if (obj.head == 'disToken_QR' && obj.type == 'pos_pay') {
-                        console.log(obj.name)
+                        // console.log(obj.name)
                         self.form.name = obj.name
                         self.isScanning = false
                         if (self.autoRequest) {
@@ -241,6 +235,13 @@
         methods: {
             GetMoment: function (date) {
                 return moment(date).format('YYYY-MM-DD HH:mm:ss')
+            },
+// eslint-disable-next-line no-unused-vars
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 0) {
+                    return 'success-row'
+                }
+                return ''
             },
             NumClick: function (str) {
                 let self = this
@@ -266,20 +267,23 @@
             },
             NumSubmit: function () {
                 let self = this
-                let reg = /^\d+(\.)\d{4}$/
+                let reg = /^\d+(\.\d{1,4})?$/
+                let f = Number.parseFloat(self.form.number)
+                let s = f.toFixed(4)
                 if (self.form.token == '') {
                     self.$alert('没有选择收款币种', '参数不正确', {
                         confirmButtonText: '关闭',
                         type: 'warning',
                         customClass: 'sakAlert'
                     })
-                } else if (!reg.test(self.form.number)) {
-                    self.$alert('收款金额不符合要求', '参数不正确', {
+                } else if (!reg.test(self.form.number) && f > 0) {
+                    self.$alert('收款金额不正确（最多四位小数）', '参数不正确', {
                         confirmButtonText: '关闭',
                         type: 'warning',
                         customClass: 'sakAlert'
                     })
                 } else {
+                    self.form.number = s
                     self.dialogFormVisible = true
                     self.isScanning = true
                     self.scanningText = '拼命扫描中'
@@ -337,6 +341,11 @@
                         self.isScanning = false
                         self.dialogFormVisible = false
                         self.QueryTrxList()
+                        self.$alert('收款成功，详情看列表', '收款结果', {
+                            confirmButtonText: '关闭',
+                            type: 'success',
+                            customClass: 'sakAlert'
+                        })
                     } else {
                         self.isRun = true
                     }
@@ -416,7 +425,17 @@
                             })
                     }
                     list = list.reverse()
-                    self.trxList = list
+                    let list2 = []
+                    for (let i in list) {
+                        if (i < 10) {
+                            let t = list[i]
+                            if (i == 0) {
+                                t.tableRowClassName = 'success-row'
+                            }
+                            list2.push(t)
+                        }
+                    }
+                    self.trxList = list2
                 }).catch(error => {
                     console.log(error)
                 })
@@ -427,7 +446,7 @@
 
 <style>
     .sakAlert {
-        width: 300px !important;
+        width: 320px !important;
         vertical-align: top !important;
         margin-top: 150px;
     }
@@ -435,5 +454,19 @@
     .sakDialog {
         width: 90% !important;
         margin-top: 90px !important;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
+
+    .sakButton {
+        width: 100%;
+        height: 90px;
+        font-size: 22px !important;
+    }
+
+    .sakButton.big {
+        height: 190px;
     }
 </style>
