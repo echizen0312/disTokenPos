@@ -7,7 +7,7 @@
                     <el-menu-item index="2">钱包余额</el-menu-item>
                 </el-menu>
             </el-header>
-            <el-main style="">
+            <el-main style="height: 100%;">
                 <router-view v-on:setTop="setTopFromChild" ref="child"/>
             </el-main>
         </el-container>
@@ -44,5 +44,15 @@
 <style>
     html {
         background-color: #F2F6FC;
+    }
+
+    #app {
+        /*position: fixed;*/
+        /*top: 0;*/
+        /*left: 0;*/
+        /*right: 0;*/
+        /*bottom: 0;*/
+        /*padding: 10px;*/
+        padding-top: 18px;
     }
 </style>

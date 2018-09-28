@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%; display: flex; justify-content: center;">
+    <div style="width: 100%; height: 100%; display: flex; justify-content: center;">
         <input v-model="scanValue" ref="scanInput" type="password"
                style="position: absolute; top: 0; left: 0; width: 0; height: 0; border: none;"/>
         <input ref="notScanInput" type="password"
@@ -276,7 +276,7 @@
                         type: 'warning',
                         customClass: 'sakAlert'
                     })
-                } else if (!reg.test(self.form.number) && f > 0) {
+                } else if (!reg.test(self.form.number) || f <= 0) {
                     self.$alert('收款金额不正确（最多四位小数）', '参数不正确', {
                         confirmButtonText: '关闭',
                         type: 'warning',
@@ -359,10 +359,7 @@
             },
             QueryNewMsg: function (id, cb) {
                 let self = this
-                let config = {
-                    chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
-                    httpEndpoint: 'http://10.255.1.225:8888'
-                }
+                let config = configObj.config
                 let eos = Eos(config)
                 let accountName = self.selfAccount
                 let pos = -1
@@ -404,10 +401,7 @@
             },
             QueryTrxList: function () {
                 let self = this
-                let config = {
-                    chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
-                    httpEndpoint: 'http://10.255.1.225:8888'
-                }
+                let config = configObj.config
                 let eos = Eos(config)
                 let accountName = self.selfAccount
                 let pos = -1
