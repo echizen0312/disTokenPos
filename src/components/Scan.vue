@@ -347,7 +347,7 @@
                             customClass: 'sakAlert'
                         })
                     } else {
-                        self.isRun = true
+                        // self.isRun = true
                     }
                     self.lastId = res.lastId
                     if (self.isRun) {
