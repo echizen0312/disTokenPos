@@ -194,9 +194,11 @@
                 isScanning: false,
                 scanningText: '',
                 scanValue: '',
+                payCode: 0,
                 autoRequest: true,
                 lastId: -1,
                 isRun: false,
+                T: null,
                 trxList: []
             }
         },
@@ -206,13 +208,21 @@
             self.QueryTrxList()
         },
         beforeDestroy: function () {
-            this.isRun = false
-            this.QueryTask = function () {
-                console.log('over')
+            let self = this
+            if (self.T != null) {
+                clearInterval(self.T)
             }
+            // this.isRun = false
+            // this.QueryTask = function () {
+            //     console.log('over')
+            // }
         },
         destroyed: function () {
-            this.isRun = false
+            let self = this
+            if (self.T != null) {
+                clearInterval(self.T)
+            }
+            // this.isRun = false
         },
         watch: {
             scanValue: function (val) {
@@ -293,19 +303,24 @@
             },
             closeDialog: function () {
                 let self = this
+                if (self.T != null) {
+                    clearInterval(self.T)
+                }
                 self.isRun = false
                 self.dialogFormVisible = false
                 self.$refs['notScanInput'].focus()
             },
             UserRequest: function () {
                 let self = this
+                self.payCode = new Date().getTime() + ''
                 let obj = {
                     head: 'disToken_MSG',
                     type: 'pos_pay',
                     msg: {
                         to: self.selfAccount,
                         number: self.form.number,
-                        token: self.form.token
+                        token: self.form.token,
+                        memo: self.payCode
                     }
                 }
                 obj = JSON.stringify(obj)
@@ -318,85 +333,57 @@
                 self.$http.post(`${self.host}/msg/SendMsg`, {
                     to: to,
                     umsg: msg
-                }, {emulateJSON: true}).then(() => {
-                    // let data = res.data
+                }, {emulateJSON: true}).then((res) => {
+                    let data = res.data
                     // console.log(data)
-                    self.isScanning = true
-                    self.scanningText = '等待回执中'
-                    self.isRun = true
-                    self.QueryTask()
+                    if (data.success) {
+                        self.isScanning = true
+                        self.scanningText = '等待回执中'
+                        self.isRun = true
+                        self.T = setInterval(function () {
+                            self.QueryTask()
+                        }, 1000)
+                    } else {
+                        self.closeDialog()
+                        self.$alert('没有通知到钱包，请重新发起扫描', '通知不正确', {
+                            confirmButtonText: '关闭',
+                            type: 'warning',
+                            customClass: 'sakAlert'
+                        })
+                    }
                 }, res => {
                     self.isScanning = false
                     console.log(res)
                 })
             },
-            QueryTask: function () {
+            QueryTask() {
                 let self = this
-                self.QueryNewMsg(self.lastId, function (res) {
-                    let datas = res.datas
-                    if (datas.length > 0 && self.lastId != -1) {
-                        let tmp = datas[datas.length - 1]
-                        console.log(tmp.trx_id)
-                        self.isRun = false
+                self.$http.post(`${self.host}/pos/CheckPay`, {
+                    account_pay: self.form.name,
+                    account_rec: self.selfAccount,
+                    quantity: self.form.number + ' ' + self.form.token,
+                    code: self.payCode
+                }, {emulateJSON: true}).then((res) => {
+                    let data = res.data
+                    // console.log(data)
+                    if (data.isPay) {
+                        if (self.T != null) {
+                            clearInterval(self.T)
+                        }
                         self.isScanning = false
                         self.dialogFormVisible = false
                         self.QueryTrxList()
+                        self.form.to = ''
+                        self.form.number = '收款金额'
+                        self.form.token = ''
                         self.$alert('收款成功，详情看列表', '收款结果', {
                             confirmButtonText: '关闭',
                             type: 'success',
                             customClass: 'sakAlert'
                         })
-                    } else {
-                        // self.isRun = true
                     }
-                    self.lastId = res.lastId
-                    if (self.isRun) {
-                        setTimeout(function () {
-                            self.QueryTask()
-                        }, 500)
-                    }
-                })
-            },
-            QueryNewMsg: function (id, cb) {
-                let self = this
-                let config = configObj.config
-                let eos = Eos(config)
-                let accountName = self.selfAccount
-                let pos = -1
-                let offset = -10
-                eos.getActions(accountName, pos, offset).then(result => {
-                    let actions = result.actions
-                    let list = []
-                    let res = {
-                        datas: [],
-                        lastId: -1
-                    }
-                    for (let i in actions) {
-                        let tmp = actions[i]
-                        if (tmp.action_trace.receipt.receiver == accountName && tmp.action_trace.act.name == 'transfer' && tmp.action_trace.act.data.from == self.form.name && tmp.action_trace.act.data.to == accountName && tmp.action_trace.act.data.quantity == `${self.form.number} ${self.form.token}`)
-                            list.push(tmp)
-                    }
-                    res.lastId = actions.length == 0 ? 0 : actions[actions.length - 1].account_action_seq
-                    if (list.length > 0) {
-                        for (let i in list) {
-                            let obj = list[i]
-                            let data = {
-                                id: -1,
-                                trx_id: ''
-                            }
-                            data.id = obj.account_action_seq
-                            data.trx_id = obj.action_trace.trx_id
-                            if (data.id > id || data.id == 0) {
-                                res.datas.push(data)
-                            }
-                            if (i == list.length - 1) {
-                                res.lastId = data.id
-                            }
-                        }
-                    }
-                    cb(res)
-                }).catch(error => {
-                    console.log(error)
+                }, res => {
+                    console.log(res)
                 })
             },
             QueryTrxList: function () {
