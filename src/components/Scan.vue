@@ -18,7 +18,8 @@
                                 inactive-text="手动确认">
                         </el-switch>
                     </div>
-                    <el-select v-model="form.token" placeholder="请选择收款币种" style="width: 100%; margin-bottom: 10px;">
+                    <el-select v-model="form.token" placeholder="请选择收款币种" style="width: 100%; margin-bottom: 10px;"
+                               @change="tokenChange">
                         <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -199,7 +200,8 @@
                 lastId: -1,
                 isRun: false,
                 T: null,
-                trxList: []
+                trxList: [],
+                nowToken: null
             }
         },
         created: function () {
@@ -246,6 +248,18 @@
             GetMoment: function (date) {
                 return moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
             },
+            tokenChange(value) {
+                let self = this
+                let obj = null
+                for (let i in self.options) {
+                    let tmp = self.options[i]
+                    if (tmp.value == value) {
+                        obj = tmp
+                        break
+                    }
+                }
+                self.nowToken = obj
+            },
 // eslint-disable-next-line no-unused-vars
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 0) {
@@ -280,7 +294,7 @@
                 let reg = /^\d+(\.\d{1,4})?$/
                 let f = Number.parseFloat(self.form.number)
                 let s = f.toFixed(4)
-                if (self.form.token == '') {
+                if (self.form.token == '' || self.nowToken == null) {
                     self.$alert('没有选择收款币种', '参数不正确', {
                         confirmButtonText: '关闭',
                         type: 'warning',
@@ -320,7 +334,9 @@
                         to: self.selfAccount,
                         number: self.form.number,
                         token: self.form.token,
-                        memo: self.payCode
+                        memo: self.payCode,
+                        code: self.nowToken.code,
+                        symbol: self.nowToken.symbol
                     }
                 }
                 obj = JSON.stringify(obj)
@@ -376,6 +392,7 @@
                         self.form.to = ''
                         self.form.number = '收款金额'
                         self.form.token = ''
+                        self.nowToken = null
                         self.$alert('收款成功，详情看列表', '收款结果', {
                             confirmButtonText: '关闭',
                             type: 'success',
